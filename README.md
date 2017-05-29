@@ -26,8 +26,8 @@ Set Up Praw INI File
 http://praw.readthedocs.io/en/latest/getting_started/configuration/prawini.html
 
 Create a script app in reddit under the bot account:
-	Reddit->Preferences->Apps->Create an app->Script->Name(Your Name)->Redirect uri(http://127.0.0.1)
-	Take note of the string under "personal use script", and "secret" string, do NOT share these.
+ Reddit->Preferences->Apps->Create an app->Script->Name(Your Name)->Redirect uri(http://127.0.0.1)
+ Take note of the string under "personal use script", and "secret" string, do NOT share these.
 "personal use script" id goes under "client_id" and "secret" under "client_secret" as noted in the "Defining Additional Sites" section of the above link
 
 Save this as .ini in the same directory of the program
@@ -42,8 +42,7 @@ commentspolled.txt contains comment ids that have been read so we do not include
 ##NOTE
 ```
 I highly reccomend timing how long the program takes to complete. If the program is interrupted manually or via Internet loss or 
-	Reddit maintainance, there is a small chance of data loss. Recccomend daily backups of CSV file.
- 
+ Reddit maintainance, there is a small chance of data loss. Recccomend daily backups of CSV file.
 ```
 
 ## Built With
