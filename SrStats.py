@@ -1,8 +1,8 @@
 import praw
 import string
 
-reddit = praw.Reddit("bot3")
-subreddit = reddit.subreddit("politics")								#Put subreddit title here as it apprears in url, multiple subs can be read
+reddit = praw.Reddit("")										#Bot title from praw.ini goes here, eg. "Bot1"
+subreddit = reddit.subreddit("")									#Put subreddit title here as it apprears in url, multiple subs can be read
 													# by appending '+' between titles, eg "sub1+sub2"
 with open('blacklist.txt', 'r') as blacklist_raw:
 	blacklist = blacklist_raw.read()
