@@ -33,13 +33,13 @@ Create a script app in reddit under the bot account:
 Save this as .ini in the same directory of the program
 ```
 
-Create "blacklist.txt" and "commentspolled.txt" in program directory
+Create "blacklist.txt" And "commentspolled.txt" In Program Directory
 ```
 blacklist.txt contains words that you do not want to be included in the final CSV file(conjunctives, certain nouns, short words, etc)
 commentspolled.txt contains comment ids that have been read so we do not include the text more than once
 ```
 
-Update SrStats.py to suit your needs
+Update SrStats.py To Suit Your Needs
 
 ###NOTE
 ```
