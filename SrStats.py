@@ -43,6 +43,7 @@ for submission in subreddit.hot(limit=25):
 	for comment in comments:
 		if str(comment.author) != "AutoModerator" and str(comment.id) not in c_polled:			
 			text = filterBody(comment.body)
+			print(text)
 			c_polled.append(str(comment.id))
 			with open("commentspolled.txt", "w") as f:							
 				for comment_id in c_polled:
