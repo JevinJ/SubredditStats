@@ -44,7 +44,7 @@ Update SrStats.py To Suit Your Needs
 ###NOTE
 ```
 I highly reccomend timing how long the program takes to complete. If the program is interrupted manually or via Internet loss or 
- Reddit maintainance, there is a small chance of data loss. Recccomend daily backups of CSV file.
+ Reddit maintainance, there is a small chance of data loss. Reccomend daily backups of CSV file.
 ```
 
 ## Built With
