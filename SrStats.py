@@ -48,23 +48,23 @@ with open('userfilter.txt', 'r', encoding='utf-8') as f:
     user_filter = user_filter.split('\n')
     user_filter = list(filter(None, user_filter))
 
-# Bot title from praw.ini goes here, eg. 'bot1'
+# Bot title from praw.ini goes here, eg('bot1')
 reddit = praw.Reddit('')
 
 # Put subreddit title here as it apprears in url, multiple subs can be read
-# by appending '+' between titles, eg 'sub1+sub2'								    
+# by appending '+' between titles, eg('sub1+sub2')								    
 subreddit = reddit.subreddit('')
 
 comment_data = load_data()
 comments_polled = load_comments_polled()
 for thread in subreddit.hot(limit=50):
     print('Working in submission: ' + str(thread.title))
-    # Can limit how many 'More Comments' you request or threshold based on how
-    # many comments you'll get. 2 seconds per request.
+    # Can limit how many deep you go with 'More Comments' sections or limit how
+    # many comments you'll get from each section. 2 seconds per request.
     thread.comments.replace_more(limit=0, threshold=4)
     comments = thread.comments.list()
     for comment in comments:
-        if str(comment.author) in user_filter or str(comment.id) in comments_polled:
+        if (str(comment.author).lower() in user_filter) or (str(comment.id) in comments_polled):
             continue
         text = filter_comment(comment.body)
         comments_polled.add(str(comment.id))

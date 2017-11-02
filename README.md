@@ -33,18 +33,28 @@ Create a script app in reddit under the bot account:
 Save this as .ini in the same directory of the program
 ```
 
-Create "blacklist.txt" And "commentspolled.txt" In Program Directory
+Create 'filter.txt' and 'userfilter.txt' in the program directory.
 ```
-blacklist.txt contains words that you do not want to be included in the final CSV file(conjunctives, certain nouns, short words, etc)
-commentspolled.txt contains comment ids that have been read so we do not include the text more than once
+filter.txt contains words that you do not want to be included in the final CSV file(conjunctives, certain nouns, short words, etc). Only include words in lowercase.
+userfilter.txt contains usernames whose comments you don't want to include, eg(automoderator). Only include names in lowercase.
+If you do not create these files, a blank file will be created for you.
 ```
 
-Update SrStats.py To Suit Your Needs
+Update Lines In SrStats.py As Commented To Suit Your Needs
+Run SrStats.py
+```
+CMD: python SrStats.py
+Terminal: python3 SrStats.py
+```
+Generate CSV when ready
+```
+CMD: python GenerateCSV.py
+Terminal: python3 GenerateCSV.py
+```
 
 ###NOTE
 ```
-I highly reccomend timing how long the program takes to complete. If the program is interrupted manually or via Internet loss or 
- Reddit maintainance, there is a small chance of data loss. Reccomend daily backups of CSV file.
+Data loss is unlikely to occur but I recommend daily backups of the generated commentdata.pickle file.
 ```
 
 ## Built With
