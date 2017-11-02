@@ -58,7 +58,7 @@ subreddit = reddit.subreddit('')
 comment_data = load_data()
 comments_polled = load_comments_polled()
 for thread in subreddit.hot(limit=50):
-    print('In submission: ' + str(thread.title))
+    print('Working in submission: ' + str(thread.title))
     # Can limit how many 'More Comments' you request or threshold based on how
     # many comments you'll get. 2 seconds per request.
     thread.comments.replace_more(limit=0, threshold=4)
@@ -67,10 +67,7 @@ for thread in subreddit.hot(limit=50):
         if str(comment.author) in user_filter or str(comment.id) in comments_polled:
             continue
         text = filter_comment(comment.body)
-        print(' '.join(text))
         comments_polled.add(str(comment.id))
-        if comment_data.get('', False):
-            print(True)
         for word in text:
             if comment_data.get(word, False):
                 comment_data[word] += 1
