@@ -1,66 +1,80 @@
+from collections import defaultdict
+import os.path
+import pickle
 import praw
 import string
 
 
-#Bot title from praw.ini goes here, eg. "Bot1"
+#Text filters: Punctuation, undesired words from filter.txt(blacklist), non alpha words,
+# and <= 1 char and >= char words
+def filter_comment(text):
+    text = text.split()
+    text = [word.lower() for word in text if word.lower() not in blacklist and
+            word.isalpha() and (len(word) > 1 and len(word) < 15)]
+    text = [''.join(ch for ch in word if ch not in string.punctuation) for word in text]
+    return text
+
+def save_data(comment_data):
+    with open('commentdata.pickle', 'wb') as f:
+        pickle.dump(comment_data, f, protocol=pickle.HIGHEST_PROTOCOL)
+
+def load_data():
+    if not os.path.isfile('commentdata.pickle'):
+        return defaultdict(int)
+    with open('commentdata.pickle', 'rb') as f:
+        return pickle.load(f)
+
+def save_comments_polled(c_polled):
+    with open('commentspolled.pickle', 'wb') as f:
+        pickle.dump(c_polled, f, protocol=pickle.HIGHEST_PROTOCOL)
+
+def load_comments_polled():
+    if not os.path.isfile('commentspolled.pickle'):
+        return set()
+    with open('commentspolled.pickle', 'rb') as f:
+        return pickle.load(f)
+
+if not os.path.isfile('filter.txt'):
+    open('filter.txt', 'w')
+with open('filter.txt', 'r', encoding='utf-8') as f:
+    blacklist = f.read()
+    blacklist = blacklist.split('\n')
+    blacklist = list(filter(None, blacklist))
+
+if not os.path.isfile('userfilter.txt'):
+    open('userfilter.txt', 'w')
+with open('userfilter.txt', 'r', encoding='utf-8') as f:
+    user_filter = f.read()
+    user_filter = user_filter.split('\n')
+    user_filter = list(filter(None, user_filter))
+
+# Bot title from praw.ini goes here, eg. 'bot1'
 reddit = praw.Reddit('')
 
-#Put subreddit title here as it apprears in url, multiple subs can be read
-# by appending '+' between titles, eg "sub1+sub2"								    
+# Put subreddit title here as it apprears in url, multiple subs can be read
+# by appending '+' between titles, eg 'sub1+sub2'								    
 subreddit = reddit.subreddit('')
-							
-with open('filter.txt', 'r', encoding='utf-8') as f:
-	blacklist = f.read()
-	blacklist = blacklist.split('\n')
-	blacklist = list(filter(None, blacklist))
-	
-with open('commentspolled.txt', 'r', encoding='utf-8') as f:
-	c_polled = f.read()
-	c_polled = c_polled.split('\n')
-	c_polled = list(filter(None, c_polled))
-	
-with open('topics.csv', 'r', encoding='utf-8') as f:
-	topics = f.read()
-	topics = topics.split('\n')
-	topics = list(filter(None, topics))
-	
-#Text filters: Punctuation, undesired words from filter.txt(blacklist), non alpha words,
-# and <= 1 char and >= char words	
-def filterBody(text):
-	text = text.split(' ')										        
-	text = [word.lower() for word in text]								
-	text = [''.join(ch for ch in word if ch not in string.punctuation) for word in text]																							 																		
-	text = [word for word in text if word not in blacklist and \
-	+ word.isalpha() and len(word) > 1 and len(word) < 15]
-	return(text)
-	
-for submission in subreddit.hot(limit=25):
-	print("In submission: " + str(submission.title))
-	#Can limit how many "More Comments" you request or threshold based on how 
-	# many comments you'll get. 2 seconds per request.
-	submission.comments.replace_more(limit=0, threshold= 4)						
-	comments = submission.comments.list()								        
-	for comment in comments:
-		if str(comment.author) != "AutoModerator" and str(comment.id) not in c_polled:			
-			text = filterBody(comment.body)
-			print(text)
-			c_polled.append(str(comment.id))
-			with open("commentspolled.txt", "w") as f:							
-				for comment_id in c_polled:
-					f.write(comment_id + "\n")
-				for word in text:
-					for num, line in enumerate(topics):				
-						if word in line:
-							spl = line.split(',')
-							num_times = int(spl[1]) + 1
-							topics[num] = word + ',' + str(num_times)
-							with open('topics.csv', 'w', encoding='utf-8') as f:
-								for x in topics:
-									f.write(x + '\n')
-							break
-					#Adding words to file if not in
-					if not any(word in line for line in topics):			      
-						topics.append(word + ',1')
-						with open('topics.csv', 'w', encoding="utf-8") as f:
-							for x in topics:
-								f.write(x + '\n')				
+
+comment_data = load_data()
+comments_polled = load_comments_polled()
+for thread in subreddit.hot(limit=50):
+    print('In submission: ' + str(thread.title))
+    # Can limit how many 'More Comments' you request or threshold based on how
+    # many comments you'll get. 2 seconds per request.
+    thread.comments.replace_more(limit=0, threshold=4)
+    comments = thread.comments.list()
+    for comment in comments:
+        if str(comment.author) in user_filter or str(comment.id) in comments_polled:
+            continue
+        text = filter_comment(comment.body)
+        print(' '.join(text))
+        comments_polled.add(str(comment.id))
+        if comment_data.get('', False):
+            print(True)
+        for word in text:
+            if comment_data.get(word, False):
+                comment_data[word] += 1
+            else:
+                comment_data[word] = 1
+    save_comments_polled(comments_polled)
+    save_data(comment_data)
