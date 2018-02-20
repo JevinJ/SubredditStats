@@ -60,7 +60,7 @@ comments_polled = load_comments_polled()
 for thread in subreddit.hot(limit=50):
     print('Working in submission: ' + str(thread.title))
     # Can limit how many deep you go with 'More Comments' sections or limit how
-    # many comments you'll get from each section. 2 seconds per request.
+    # many comments you'll get from each section, default is sufficient. 2 seconds per request.
     thread.comments.replace_more(limit=0, threshold=4)
     comments = thread.comments.list()
     for comment in comments:
