@@ -1,4 +1,4 @@
-# Subreddit-Stats
+# SubredditStats
 Reddit bot for anonymously monitoring the frequency of topics in a single or multiple subreddits using PRAW library. Topics/mentions are filtered with a blacklist as well as length and punctuation, and saved to a CSV file. 
 
 ### Prerequisites
