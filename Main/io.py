@@ -4,7 +4,6 @@ import pickle
 
 def save_pickle(filename, pickle_data):
     with open(filename, 'wb') as f:
-        print('here')
         pickle.dump(pickle_data, f, protocol=pickle.HIGHEST_PROTOCOL)
 
 def load_pickle(filename):
