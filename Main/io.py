@@ -11,6 +11,8 @@ def load_pickle(filename):
         with open(filename, 'rb') as f:
             return pickle.load(f)
     except FileNotFoundError:
+        with open(filename, 'w', encoding='utf-8') as f:
+            f.write('')
         return defaultdict(int)
 
 def load_file_as_set(filename):
