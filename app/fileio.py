@@ -15,6 +15,9 @@ def load_pickle(from_relative_path, filename):
         return pickle.load(f)
 
 def load_file(from_relative_path, filename):
+    '''
+    :return: A list of lines of the filename located at the absolute path of from_relative_path.
+    '''
     abs_path = path.abspath(path.join(from_relative_path, filename))
     while True:
         try:
