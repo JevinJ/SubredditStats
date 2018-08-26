@@ -1,4 +1,5 @@
 from collections import Counter
+import gzip
 import os
 import os.path as path
 import pickle
@@ -6,12 +7,12 @@ import pickle
 
 def save_pickle(pickle_data, to_relative_path, filename):
     abs_path = path.abspath(path.join(to_relative_path, filename))
-    with open(abs_path, 'wb') as f:
+    with gzip.open(abs_path, 'wb') as f:
         pickle.dump(pickle_data, f, protocol=pickle.HIGHEST_PROTOCOL)
 
 def load_pickle(from_relative_path, filename):
     abs_path = path.abspath(path.join(from_relative_path, filename))
-    with open(abs_path, 'rb') as f:
+    with gzip.open(abs_path, 'rb') as f:
         return pickle.load(f)
 
 def load_file(from_relative_path, filename):
