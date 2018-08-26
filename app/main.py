@@ -86,10 +86,10 @@ class SubredditStats:
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
-    parser.add_argument('--name', type=str, metavar='BOT_NAME', dest='bot_name', required=True,
+    parser.add_argument('bot_name', type=str, metavar='BOT_NAME',
                         help='The name/site of the bot as defined in praw.ini')
-    parser.add_argument('--target', type=str, metavar='SUB_NAME', required=True,
-                        help='Subreddit(s) to target, "+" to use multiple subs, eg: pcgaming or pcgaming+gaming')
+    parser.add_argument('target', type=str, metavar='SUB_NAME',
+                        help='Subreddit(s) to target, "+" to target multiple subs, eg: pcgaming or pcgaming+gaming')
     parser.add_argument('--interval', type=lambda i: abs(int(i)), metavar='CSV_PERIOD', dest='csv_period', default=1,
-                        help='Time interval in days to compile a csv containing word frequencies for that period')
+                        help='Time interval in days to compile a csv containing word frequencies for that interval, default=1')
     SubredditStats(**vars(parser.parse_args()))
