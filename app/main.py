@@ -18,6 +18,8 @@ class SubredditStats:
               f' and generating a new csv every {kwargs["csv_period"]} day(s)')
         self.reddit = praw.Reddit(kwargs['bot_name'])
         self.target = self.reddit.subreddit(kwargs['target'])
+        self.target_foldername = kwargs['target'].replace('+', '_')
+        fio.create_directory_path(f'output/{self.target_foldername}/completedcsv')
         self.csv_period = kwargs['csv_period']
         self.word_frequency = defaultdict(int)
         self.user_filter = set(filter(None, fio.load_file('', 'user_filter.txt')))
@@ -69,19 +71,15 @@ class SubredditStats:
             #If an hour has passed since start-up/last save, save the word frequencies into a file and wipe it.
             if (time_now - self.last_dataset_save).seconds // 3600 >= 1:
                 pickle_filename = f'{self.last_dataset_save.strftime(constants.FILE_TIMESTAMP_FORMAT)}.pickle'
-                fio.save_pickle(self.word_frequency, 'output', pickle_filename)
+                fio.save_pickle(self.word_frequency, f'output/{self.target_foldername}', pickle_filename)
                 self.word_frequency = defaultdict(int)
                 self.last_dataset_save = datetime.now()
-                print(f'{time_now.strftime(constants.CONSOLE_TIMESTAMP_FORMAT)}' + \
-                      f' Saved {pickle_filename} to /output/')
 
             #If self.csv_period days have passed since start-up/last save, generate a csv and wipe saved pickle files.
-            if (time_now - self.last_csv_generation).seconds // 86400 >= self.csv_period:
+            if (time_now - self.last_csv_generation).seconds // 86400 >= 1:
                 csv_filename = f'{self.last_csv_generation.strftime(constants.FILE_TIMESTAMP_FORMAT)}.csv'
-                fio.generate_csv('output', 'output/completedcsv', csv_filename)
+                fio.generate_csv(f'output/{self.target_foldername}', f'output/{self.target_foldername}/completedcsv', csv_filename)
                 self.last_csv_generation = datetime.now()
-                print(f'{time_now.strftime(constants.CONSOLE_TIMESTAMP_FORMAT)}' + \
-                      f' Generated {csv_filename} to /output/completedcsv')
 
 
 if __name__ == '__main__':
