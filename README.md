@@ -35,17 +35,17 @@ In SubredditStats/app run main.py
 python main.py [bot site/name] [subreddits to target] --interval[a number, the time in days to generate a CSV](optional, default is 1)
 ```
 
-#####Example: 
+##### Example: 
 ```
 python main.py bot1 pcgaming+gaming --interval 3
 ```
-######Will collect comments/submissions from pcgaming & gaming. After 3 days, a CSV will be ready and you can read the results.
+###### Will collect comments/submissions from pcgaming & gaming. After 3 days, a CSV will be ready and you can read the results.
 
-#####Another Example:
+##### Another Example:
 ```
 python main.py bot1 learnpython
 ```
-######Will collect from learnpython. A CSV will be ready after the default 1 day.
+###### Will collect from learnpython. A CSV will be ready after the default 1 day.
 
 ## Built With
 * [PRAW](http://praw.readthedocs.io/en/latest/index.html)
