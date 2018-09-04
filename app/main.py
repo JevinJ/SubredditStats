@@ -30,8 +30,8 @@ class SubredditStats:
 
     def filter_text(self, text, min_length=1, max_length=16):
         '''
-        Text filtering, filters punctuation, converts non-ascii, undesired, very short/long words, or
-        anything in word_filter.txt
+        Text filtering, filters punctuation, converts non-ascii, undesired, very short/long words,
+        or anything in word_filter.txt
         :param text: The full text body of a comment or submission title.
         :param min_length: The minimum length of a single word in text, anything less is filtered out.
         :param max_length: The maximum length of a single word in text, anything more is filtered out.
@@ -78,7 +78,9 @@ class SubredditStats:
             #If self.csv_period days have passed since start-up/last save, generate a csv and wipe saved pickle files.
             if (time_now - self.last_csv_generation).seconds // 86400 >= 1:
                 csv_filename = f'{self.last_csv_generation.strftime(constants.FILE_TIMESTAMP_FORMAT)}.csv'
-                fio.generate_csv(f'output/{self.target_foldername}', f'output/{self.target_foldername}/completedcsv', csv_filename)
+                fio.generate_csv(f'output/{self.target_foldername}',
+                                 f'output/{self.target_foldername}/completedcsv',
+                                 csv_filename)
                 self.last_csv_generation = datetime.now()
 
 
@@ -88,6 +90,7 @@ if __name__ == '__main__':
                         help='The name/site of the bot as defined in praw.ini')
     parser.add_argument('target', type=str, metavar='SUB_NAME',
                         help='Subreddit(s) to target, "+" to target multiple subs, eg: pcgaming or pcgaming+gaming')
-    parser.add_argument('--interval', type=lambda i: abs(int(i)), metavar='CSV_PERIOD', dest='csv_period', default=1,
-                        help='Time interval in days to compile a csv containing word frequencies for that interval, default=1')
+    parser.add_argument('--interval', type=lambda i: abs(int(i)) or 1, metavar='CSV_PERIOD', dest='csv_period', default=1,
+                        help='Time interval in days to compile a new csv containing word frequencies,' + \
+                             ' may not be less than 1. default=1')
     SubredditStats(**vars(parser.parse_args()))
